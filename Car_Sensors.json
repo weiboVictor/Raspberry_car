@@ -1,0 +1,24 @@
+"Sensors":{
+    "motor_1":{
+        "speed": ,
+        "duration":
+    },
+    "motor_2":{
+        "speed": ,
+        "duration":
+    },
+    "motor_3":{
+        "speed": ,
+        "duration":
+    },
+    "motor_4":{
+        "speed": ,
+        "duration":
+    },
+    "ADC":{
+        "left_IDR": ,
+        "right_IDR": ,
+        "battery": 
+    },
+
+}
