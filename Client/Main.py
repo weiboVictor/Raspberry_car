@@ -515,12 +515,12 @@ class mywindow(QMainWindow,Ui_Client):
                 self.streaming=Thread(target=self.TCP.streaming,args=(self.h,))
                 self.streaming.start()
             except:
-                print 'video error'
+                print('video error')
             try:
                 self.recv=Thread(target=self.recvmassage)
                 self.recv.start()
             except:
-                print 'recv error'
+                print('recv error')
             self.Btn_Connect.setText( "Disconnect")
             print ('Server address:'+str(self.h)+'\n')
         elif self.Btn_Connect.text()=="Disconnect":

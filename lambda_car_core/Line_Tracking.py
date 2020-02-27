@@ -11,7 +11,6 @@ GPIO.setup(IR03,GPIO.IN)
 class Line_Tracking:
     def run(self):
         while True:
-            start = time.time()
             self.LMR=0x00
             if GPIO.input(IR01)==True:
                 self.LMR=(self.LMR | 4) # Left
@@ -31,9 +30,7 @@ class Line_Tracking:
                 PWM.setMotorModel(4000,4000,-2000,-2000) #Right ++
             elif self.LMR==7:
                 pass
-            finish = time.time()
-            lenth = finish - start
-            print(lenth)
+            
 infrared=Line_Tracking()
 # Main program logic follows:
 if __name__ == '__main__':
