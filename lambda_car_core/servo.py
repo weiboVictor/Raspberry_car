@@ -1,11 +1,17 @@
 import time
 from PCA9685 import PCA9685
+
+#Calibrate the servo
+SERVO_ORIZON = 95
+SERVO_VERTIC = 95
+
 class Servo:
     def __init__(self):
         self.PwmServo = PCA9685(0x40, debug=True)
         self.PwmServo.setPWMFreq(50)
         self.PwmServo.setServoPulse(8,1500)
         self.PwmServo.setServoPulse(9,1500)
+
     def setServoPwm(self,channel,angle,error=10):
         angle=int(angle)
         if channel=='0':
@@ -28,8 +34,8 @@ class Servo:
 # Main program logic follows:
 if __name__ == '__main__':
     pwm=Servo()
-    pwm.setServoPwm('0',97)
-    pwm.setServoPwm('1',90)
+    pwm.setServoPwm('0',SERVO_ORIZON)
+    pwm.setServoPwm('1',SERVO_VERTIC)
     
 
     
