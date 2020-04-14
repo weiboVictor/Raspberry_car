@@ -3,19 +3,26 @@ import sys
 from redis import Redis
 from botocore.exceptions import ClientError
 import json
+import greengrasssdk
 import time
 from threading import Timer
 import boto3
 import uuid
 import os
+#Configuration while setup lambda in Greengrass
+#DYNAMO_DB = "Raspberry_Car_Object"
+S3_BUCKET = os.environ['s3_bucket'] #iot-raspberry-car
+S3_KEY = os.environ['s3_key'] #car1/camera_images/
+CAR = os.environ['car_name'] # car1
+TOPIC = os.environ['topic'] # broadcast/traffic/objects
+FREQUENCY = int(os.environ['frequency'])
+EVENT_TYPE = "traffic"
+
 # Setup logging to stdout
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-DYNAMO_DB = "Raspberry_Car_Object"
-S3_BUCKET = "iot-raspberry-car"
-S3_KEY = "camera_images/"
-
+client = greengrasssdk.client("iot-data")
 
 def s3_upload(img_local_path):
     try:
@@ -37,7 +44,7 @@ def upload_img_to_cloud():
     try:
         cli = Redis('localhost')
         while True:
-            item = cli.lpop('car')
+            item = cli.lpop('car_images')
             if not item:
                 logger.info("car queue is empty")
                 break
@@ -52,23 +59,19 @@ def upload_img_to_cloud():
                 uniqueid = uuid.uuid4().hex
                 file_name = os.path.basename(img_local_path)
                 try:
-                    logging.debug("dynamodb: entry")
-                    dynamodb_client = boto3.client('dynamodb')
-                    dynamodb_client.put_item(TableName=DYNAMO_DB, 
-                                Item={'detection_time': {'S':detection_time}, 
-                                    'position':{'S': position},
-                                    'rfid_pos':{'S': rfid_pos},
-                                    's3_path':{'S': S3_KEY+file_name},
-                                    'hash_tag':{'S': uniqueid} }) 
-                    logging.debug("dynamodb: success")
-                except ClientError as e:
+                    logging.debug("mqtt: entry")
+                    MSG=json.dumps({"type":EVENT_TYPE,"reporter":CAR,"position": position,"rfid_pos": rfid_pos, "object_s3_path":S3_KEY+file_name, "hash_tag": uniqueid,"detection_time": detection_time})
+                    client.publish(
+                        topic=TOPIC, queueFullPolicy="AllOrException", payload=MSG
+                    )
+                except Exception as e:
                     logger.error(e)
 
     except Exception as e:
         logger.error("upload_img_to_cloud error: " + repr(e))
 
     # Asynchronously schedule this function to be run again in 5 seconds
-    Timer(10, upload_img_to_cloud).start()
+    Timer(FREQUENCY, upload_img_to_cloud).start()
 
 
 # Start executing the function above

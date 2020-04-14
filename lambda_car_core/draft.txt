@@ -1,0 +1,254 @@
+img_right_1583833505.05.jpg
+
+/home/pi/Freenove_4WD_Smart_Car_Kit_for_Raspberry_Pi/Code/lambda_car_core/camera_images
+
+from redis import Redis
+import json
+import time
+
+cli = Redis('localhost')
+DEFAULT_PATH = '/home/pi/Freenove_4WD_Smart_Car_Kit_for_Raspberry_Pi/Code/lambda_car_core/camera_images/'
+img_local_path = DEFAULT_PATH+"img_right_1583847626.07.jpg"
+detection_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+rfid_pos = "xe01"
+img_pos = "right"
+img_meta = {'img_local_path':img_local_path,'detection_time': detection_time, 'position':img_pos, 'rfid_pos':rfid_pos}
+img_meta = json.dumps(img_meta)
+cli.rpush("car_images", img_meta)
+
+item = cli.lpop('car')
+dt = json.loads(item)
+
+print(dt['img_local_path'])
+print(dt['detection_time'])
+print(dt['position'])
+print(dt['rfid_pos'])
+
+
+cd /greengrass/ggc/
+
+2020-03-10T19:12:44.784+01:00][FATAL]-lambda_runtime.py:380,Failed to initialize Lambda runtime due to excepti
+on: module 'ggUploadImage' has no attribute 'function_handler'
+[2020-03-10T19:12:45.582+01:00][FATAL]-lambda_runtime.py:140,Failed to import handler function "ggUploadImage.f
+unction_handler" due to exception: module 'ggUploadImage' has no attribute 'function_handler'
+[2020-03-10T19:12:45.582+01:00][FATAL]-lambda_runtime.py:380,Failed
+
+
+
+[2020-03-10T21:10:48.521+01:00][DEBUG]-ggUploadImage.py:49,redis data is below: 
+[2020-03-10T21:10:48.521+01:00][DEBUG]-ggUploadImage.py:50,{'img_local_path': 'home/pi/Freenove_4WD_Smart_Car_Kit_for_Raspberry_Pi/Code/camera_images/img_right_1583870592.1700053.jpg', 'detection_time': '2020-03-03/10/20 21:03:12', 'position': 'right', 'rfid_pos': 'xe01'}
+[2020-03-10T21:10:48.521+01:00][DEBUG]-ggUploadImage.py:22,s3_upload: entry
+[2020-03-10T21:10:48.53+01:00][DEBUG]-hooks.py:417,Changing event name from creating-client-class.iot-data to creating-client-class.iot-data-plane
+[2020-03-10T21:10:48.58+01:00][DEBUG]-hooks.py:417,Changing event name from before-call.apigateway to before-call.api-gateway
+[2020-03-10T21:10:48.585+01:00][DEBUG]-hooks.py:417,Changing event name from request-created.machinelearning.Predict to request-created.machine-learning.Predict
+[2020-03-10T21:10:48.611+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.autoscaling.CreateLaunchConfiguration to before-parameter-build.auto-scaling.CreateLaunchConfiguration
+[2020-03-10T21:10:48.612+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.route53 to before-parameter-build.route-53
+[2020-03-10T21:10:48.618+01:00][DEBUG]-hooks.py:417,Changing event name from request-created.cloudsearchdomain.Search to request-created.cloudsearch-domain.Search
+[2020-03-10T21:10:48.628+01:00][DEBUG]-hooks.py:417,Changing event name from docs.*.autoscaling.CreateLaunchConfiguration.complete-section to docs.*.auto-scaling.CreateLaunchConfiguration.complete-section
+[2020-03-10T21:10:48.647+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.logs.CreateExportTask to before-parameter-build.cloudwatch-logs.CreateExportTask
+[2020-03-10T21:10:48.647+01:00][DEBUG]-hooks.py:417,Changing event name from docs.*.logs.CreateExportTask.complete-section to docs.*.cloudwatch-logs.CreateExportTask.complete-section
+[2020-03-10T21:10:48.648+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.cloudsearchdomain.Search to before-parameter-build.cloudsearch-domain.Search
+[2020-03-10T21:10:48.648+01:00][DEBUG]-hooks.py:417,Changing event name from docs.*.cloudsearchdomain.Search.complete-section to docs.*.cloudsearch-domain.Search.complete-section
+[2020-03-10T21:10:48.681+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: env
+[2020-03-10T21:10:48.681+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: assume-role
+[2020-03-10T21:10:48.682+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: assume-role-with-web-identity
+[2020-03-10T21:10:48.682+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: shared-credentials-file
+[2020-03-10T21:10:48.682+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: custom-process
+[2020-03-10T21:10:48.683+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: config-file
+[2020-03-10T21:10:48.683+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: ec2-credentials-file
+[2020-03-10T21:10:48.683+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: boto-config
+[2020-03-10T21:10:48.684+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: container-role
+[2020-03-10T21:10:48.687+01:00][DEBUG]-connectionpool.py:225,Starting new HTTP connection (1): localhost:8000
+[2020-03-10T21:10:49.039+01:00][DEBUG]-connectionpool.py:437,http://localhost:8000 "GET /2016-11-01/credentialprovider/ HTTP/1.1" 200 854
+[2020-03-10T21:10:49.057+01:00][DEBUG]-loaders.py:174,Loading JSON file: /lambda/botocore/data/endpoints.json
+[2020-03-10T21:10:49.169+01:00][DEBUG]-hooks.py:210,Event choose-service-name: calling handler <function handle_service_name_alias at 0x7594c4f8>
+[2020-03-10T21:10:49.701+01:00][DEBUG]-loaders.py:174,Loading JSON file: /lambda/botocore/data/s3/2006-03-01/service-2.json
+[2020-03-10T21:10:49.795+01:00][DEBUG]-hooks.py:210,Event creating-client-class.s3: calling handler <function add_generate_presigned_post at 0x75ab08a0>
+[2020-03-10T21:10:49.795+01:00][DEBUG]-hooks.py:210,Event creating-client-class.s3: calling handler <function lazy_call.<locals>._handler at 0x7592f030>
+[2020-03-10T21:10:49.903+01:00][ERROR]-ggUploadImage.py:68,upload_img_to_cloud error: SyntaxError('invalid syntax', ('/lambda/concurrent/futures/_base.py', 414, 33, '            raise exception_type, self._exception, self._traceback\n'))
+[2020-03-10T21:10:59.93+01:00][INFO]-ggUploadImage.py:42,car queue is empty
+
+
+[2020-03-10T21:35:24.258+01:00][DEBUG]-ggUploadImage.py:51,redis data is below: 
+[2020-03-10T21:35:24.258+01:00][DEBUG]-ggUploadImage.py:52,{'img_local_path': 'home/pi/Freenove_4WD_Smart_Car_Kit_for_Raspberry_Pi/Code/camera_images/img_right_1583872204.4793105.jpg', 'detection_time': '2020-30-03/10/20 21:30:04', 'position': 'right', 'rfid_pos': 'xe01'}
+[2020-03-10T21:35:24.259+01:00][DEBUG]-ggUploadImage.py:22,s3_upload: entry
+[2020-03-10T21:35:24.269+01:00][DEBUG]-hooks.py:417,Changing event name from creating-client-class.iot-data to creating-client-class.iot-data-plane
+[2020-03-10T21:35:24.321+01:00][DEBUG]-hooks.py:417,Changing event name from before-call.apigateway to before-call.api-gateway
+[2020-03-10T21:35:24.326+01:00][DEBUG]-hooks.py:417,Changing event name from request-created.machinelearning.Predict to request-created.machine-learning.Predict
+[2020-03-10T21:35:24.345+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.autoscaling.CreateLaunchConfiguration to before-parameter-build.auto-scaling.CreateLaunchConfiguration
+[2020-03-10T21:35:24.346+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.route53 to before-parameter-build.route-53
+[2020-03-10T21:35:24.349+01:00][DEBUG]-hooks.py:417,Changing event name from request-created.cloudsearchdomain.Search to request-created.cloudsearch-domain.Search
+[2020-03-10T21:35:24.354+01:00][DEBUG]-hooks.py:417,Changing event name from docs.*.autoscaling.CreateLaunchConfiguration.complete-section to docs.*.auto-scaling.CreateLaunchConfiguration.complete-section
+[2020-03-10T21:35:24.372+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.logs.CreateExportTask to before-parameter-build.cloudwatch-logs.CreateExportTask
+[2020-03-10T21:35:24.372+01:00][DEBUG]-hooks.py:417,Changing event name from docs.*.logs.CreateExportTask.complete-section to docs.*.cloudwatch-logs.CreateExportTask.complete-section
+[2020-03-10T21:35:24.373+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.cloudsearchdomain.Search to before-parameter-build.cloudsearch-domain.Search
+[2020-03-10T21:35:24.374+01:00][DEBUG]-hooks.py:417,Changing event name from docs.*.cloudsearchdomain.Search.complete-section to docs.*.cloudsearch-domain.Search.complete-section
+[2020-03-10T21:35:24.398+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: env
+[2020-03-10T21:35:24.398+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: assume-role
+[2020-03-10T21:35:24.398+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: assume-role-with-web-identity
+[2020-03-10T21:35:24.399+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: shared-credentials-file
+[2020-03-10T21:35:24.399+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: custom-process
+[2020-03-10T21:35:24.399+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: config-file
+[2020-03-10T21:35:24.399+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: ec2-credentials-file
+[2020-03-10T21:35:24.4+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: boto-config
+[2020-03-10T21:35:24.4+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: container-role
+[2020-03-10T21:35:24.404+01:00][DEBUG]-connectionpool.py:225,Starting new HTTP connection (1): localhost:8000
+[2020-03-10T21:35:24.803+01:00][DEBUG]-connectionpool.py:437,http://localhost:8000 "GET /2016-11-01/credentialprovider/ HTTP/1.1" 200 854
+[2020-03-10T21:35:24.803+01:00][DEBUG]-loaders.py:174,Loading JSON file: /lambda/botocore/data/endpoints.json
+[2020-03-10T21:35:24.847+01:00][DEBUG]-hooks.py:210,Event choose-service-name: calling handler <function handle_service_name_alias at 0x75a4b618>
+[2020-03-10T21:35:24.927+01:00][DEBUG]-loaders.py:174,Loading JSON file: /lambda/botocore/data/s3/2006-03-01/service-2.json
+[2020-03-10T21:35:25.518+01:00][DEBUG]-hooks.py:210,Event creating-client-class.s3: calling handler <function add_generate_presigned_post at 0x75b659c0>
+[2020-03-10T21:35:25.519+01:00][DEBUG]-hooks.py:210,Event creating-client-class.s3: calling handler <function lazy_call.<locals>._handler at 0x75aab150>
+[2020-03-10T21:35:25.624+01:00][ERROR]-ggUploadImage.py:70,upload_img_to_cloud error: SyntaxError('invalid syntax', ('/lambda/concurrent/futures/_base.py', 414, 33, '            raise exception_type, self._exception, self._traceback\n'))
+
+
+[2020-03-10T21:47:01.297+01:00][DEBUG]-ggUploadImage.py:51,redis data is below: 
+[2020-03-10T21:47:01.297+01:00][DEBUG]-ggUploadImage.py:52,{'img_local_path': 'home/pi/Freenove_4WD_Smart_Car_Kit_for_Raspberry_Pi/Code/camera_images/img_right_1583872204.4793105.jpg', 'detection_time': '2020-30-03/10/20 21:30:04', 'position': 'right', 'rfid_pos': 'xe01'}
+[2020-03-10T21:47:01.297+01:00][DEBUG]-ggUploadImage.py:57,dynamodb: entry
+[2020-03-10T21:47:01.307+01:00][DEBUG]-hooks.py:417,Changing event name from creating-client-class.iot-data to creating-client-class.iot-data-plane
+[2020-03-10T21:47:01.358+01:00][DEBUG]-hooks.py:417,Changing event name from before-call.apigateway to before-call.api-gateway
+[2020-03-10T21:47:01.364+01:00][DEBUG]-hooks.py:417,Changing event name from request-created.machinelearning.Predict to request-created.machine-learning.Predict
+[2020-03-10T21:47:01.39+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.autoscaling.CreateLaunchConfiguration to before-parameter-build.auto-scaling.CreateLaunchConfiguration
+[2020-03-10T21:47:01.391+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.route53 to before-parameter-build.route-53
+[2020-03-10T21:47:01.394+01:00][DEBUG]-hooks.py:417,Changing event name from request-created.cloudsearchdomain.Search to request-created.cloudsearch-domain.Search
+[2020-03-10T21:47:01.399+01:00][DEBUG]-hooks.py:417,Changing event name from docs.*.autoscaling.CreateLaunchConfiguration.complete-section to docs.*.auto-scaling.CreateLaunchConfiguration.complete-section
+[2020-03-10T21:47:01.417+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.logs.CreateExportTask to before-parameter-build.cloudwatch-logs.CreateExportTask
+[2020-03-10T21:47:01.418+01:00][DEBUG]-hooks.py:417,Changing event name from docs.*.logs.CreateExportTask.complete-section to docs.*.cloudwatch-logs.CreateExportTask.complete-section
+[2020-03-10T21:47:01.418+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.cloudsearchdomain.Search to before-parameter-build.cloudsearch-domain.Search
+[2020-03-10T21:47:01.419+01:00][DEBUG]-hooks.py:417,Changing event name from docs.*.cloudsearchdomain.Search.complete-section to docs.*.cloudsearch-domain.Search.complete-section
+[2020-03-10T21:47:01.443+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: env
+[2020-03-10T21:47:01.443+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: assume-role
+[2020-03-10T21:47:01.443+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: assume-role-with-web-identity
+[2020-03-10T21:47:01.443+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: shared-credentials-file
+[2020-03-10T21:47:01.444+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: custom-process
+[2020-03-10T21:47:01.444+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: config-file
+[2020-03-10T21:47:01.444+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: ec2-credentials-file
+[2020-03-10T21:47:01.445+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: boto-config
+[2020-03-10T21:47:01.445+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: container-role
+[2020-03-10T21:47:01.448+01:00][DEBUG]-connectionpool.py:225,Starting new HTTP connection (1): localhost:8000
+[2020-03-10T21:47:01.793+01:00][DEBUG]-connectionpool.py:437,http://localhost:8000 "GET /2016-11-01/credentialprovider/ HTTP/1.1" 200 854
+[2020-03-10T21:47:01.797+01:00][DEBUG]-loaders.py:174,Loading JSON file: /lambda/botocore/data/endpoints.json
+[2020-03-10T21:47:01.85+01:00][DEBUG]-hooks.py:210,Event choose-service-name: calling handler <function handle_service_name_alias at 0x75a86618>
+[2020-03-10T21:47:01.889+01:00][DEBUG]-loaders.py:174,Loading JSON file: /lambda/botocore/data/dynamodb/2012-08-10/service-2.json
+[2020-03-10T21:47:01.926+01:00][DEBUG]-hooks.py:210,Event creating-client-class.dynamodb: calling handler <function add_generate_presigned_url at 0x75b9e8a0>
+[2020-03-10T21:47:01.95+01:00][DEBUG]-endpoint.py:266,Setting dynamodb timeout as (60, 60)
+[2020-03-10T21:47:01.954+01:00][DEBUG]-loaders.py:174,Loading JSON file: /lambda/botocore/data/_retry.json
+[2020-03-10T21:47:01.96+01:00][DEBUG]-client.py:159,Registering retry handlers for service: dynamodb
+[2020-03-10T21:47:01.966+01:00][DEBUG]-hooks.py:210,Event before-parameter-build.dynamodb.PutItem: calling handler <function generate_idempotent_uuid at 0x75a97618>
+[2020-03-10T21:47:01.967+01:00][DEBUG]-hooks.py:210,Event before-parameter-build.dynamodb.PutItem: calling handler <function block_endpoint_discovery_required_operations at 0x75ba9540>
+[2020-03-10T21:47:01.971+01:00][DEBUG]-hooks.py:210,Event before-call.dynamodb.PutItem: calling handler <function inject_api_version_header_if_needed at 0x75a99390>
+[2020-03-10T21:47:01.972+01:00][DEBUG]-endpoint.py:101,Making request for OperationModel(name=PutItem) with params: {'url_path': '/', 'query_string': '', 'method': 'POST', 'headers': {'X-Amz-Target': 'DynamoDB_20120810.PutItem', 'Content-Type': 'application/x-amz-json-1.0', 'User-Agent': 'Boto3/1.12.18 Python/3.7.3 Linux/4.19.97-v7+ Botocore/1.15.18'}, 'body': b'{"TableName": "Raspberry_Car_Object", "Item": {"detection_time": {"S": "2020-30-03/10/20 21:30:04"}, "position": {"S": "right"}, "rfid_pos": {"S": "xe01"}, "s3_path": {"S": "camera_images/img_right_1583872204.4793105.jpg"}, "hash_tag": {"S": "71627d96c28b45d396f1a086650be8ea"}}}', 'url': 'https://dynamodb.eu-west-1.amazonaws.com/', 'context': {'client_region': 'eu-west-1', 'client_config': <botocore.config.Config object at 0x74743950>, 'has_streaming_input': False, 'auth_type': None}}
+[2020-03-10T21:47:01.973+01:00][DEBUG]-hooks.py:210,Event request-created.dynamodb.PutItem: calling handler <bound method RequestSigner.handler of <botocore.signers.RequestSigner object at 0x74743930>>
+[2020-03-10T21:47:01.974+01:00][DEBUG]-hooks.py:210,Event choose-signer.dynamodb.PutItem: calling handler <function set_operation_specific_signer at 0x75a97588>
+[2020-03-10T21:47:01.982+01:00][DEBUG]-auth.py:364,Calculating signature using v4 auth.
+[2020-03-10T21:47:01.982+01:00][DEBUG]-auth.py:365,CanonicalRequest:
+[2020-03-10T21:47:01.982+01:00][DEBUG]-POST
+[2020-03-10T21:47:01.982+01:00][DEBUG]-/
+[2020-03-10T21:47:01.982+01:00][DEBUG]-content-type:application/x-amz-json-1.0
+[2020-03-10T21:47:01.982+01:00][DEBUG]-host:dynamodb.eu-west-1.amazonaws.com
+[2020-03-10T21:47:01.982+01:00][DEBUG]-x-amz-date:20200310T204701Z
+[2020-03-10T21:47:01.982+01:00][DEBUG]-x-amz-security-token:IQoJb3JpZ2luX2VjEB0aCWV1LXdlc3QtMSJHMEUCIQCIPE3SpvOgJ+S3V/gqQebFp4yg1VZAyr96LaHmxd/aqwIgaBae3i9mNKuHYonSBk0Fr3thRTa1DLUjAZ6/aUpSIVsqzgEI9v//////////ARABGgw3MDM3MjQ0MTE2MzciDOOarXUZtOTw/i99LiqiAVyM4GfWTJWRH62KfvNxy+U0ULwrAQEvshVB4rQveYlQWl16M/ZM4Pn/SItuTGXxpYhay7FNISLGFIgu/nrZFRVuz8DiLE4IclnUVbdWQXVyLZSl2kLEsI+9Dzgl5A2KPNtMQDMEqGmKPgloQvU5dfJycAqt7uapn2mZ61LjKqD7biVV5+AhgyQKYLUEFM6nSnagPVL+8LlZqpB3xlvax/16hjDF+Z/zBTrVAR+dSlDxi31TAl1w4bt12qmia6CW23q+rJTjmKfj6PjWLKoj/dgxHaPdoA5hfkuyqTj82n8ro5r8uQpWLN+bQjZdw70z1uZ0fcFUa0klqBLtMzQlk3MqgySZdwEk3oBrAYDb1x/QyQrXTUKKsApoEoTFvJBAwChQfOvGg2IT2ZoOFxzOwbtzy9JAE+HcFCwWiLINDGMq7yqmiaoBBs+B8e9U0xUEYjb/A5Fr18UqYxggkbb1j7sgdBqbzlAQbiQmGCDn+8q9osY7Ss4dQojTslYpR2PBvA==
+[2020-03-10T21:47:01.982+01:00][DEBUG]-x-amz-target:DynamoDB_20120810.PutItem
+[2020-03-10T21:47:01.982+01:00][DEBUG]-content-type;host;x-amz-date;x-amz-security-token;x-amz-target
+[2020-03-10T21:47:01.982+01:00][DEBUG]-60a08572346c29e8b4b3689be83ce3867fdb9d483c6052ef5ec957940b4e7b2e
+[2020-03-10T21:47:01.982+01:00][DEBUG]-auth.py:367,StringToSign:
+[2020-03-10T21:47:01.982+01:00][DEBUG]-AWS4-HMAC-SHA256
+[2020-03-10T21:47:01.982+01:00][DEBUG]-20200310T204701Z
+[2020-03-10T21:47:01.982+01:00][DEBUG]-20200310/eu-west-1/dynamodb/aws4_request
+[2020-03-10T21:47:01.982+01:00][DEBUG]-44803e9fd2f842f2fc6d47154f0dc80ab4ae194c443d69a216715a84ccb8f7ca
+[2020-03-10T21:47:01.984+01:00][DEBUG]-auth.py:369,Signature:
+[2020-03-10T21:47:01.984+01:00][DEBUG]-7ac6ba62027fb817085459b14f79fb91e05181ab7e158448111a258818d52316
+[2020-03-10T21:47:01.985+01:00][DEBUG]-endpoint.py:187,Sending http request: <AWSPreparedRequest stream_output=False, method=POST, url=https://dynamodb.eu-west-1.amazonaws.com/, headers={'X-Amz-Target': b'DynamoDB_20120810.PutItem', 'Content-Type': b'application/x-amz-json-1.0', 'User-Agent': b'Boto3/1.12.18 Python/3.7.3 Linux/4.19.97-v7+ Botocore/1.15.18', 'X-Amz-Date': b'20200310T204701Z', 'X-Amz-Security-Token': b'IQoJb3JpZ2luX2VjEB0aCWV1LXdlc3QtMSJHMEUCIQCIPE3SpvOgJ+S3V/gqQebFp4yg1VZAyr96LaHmxd/aqwIgaBae3i9mNKuHYonSBk0Fr3thRTa1DLUjAZ6/aUpSIVsqzgEI9v//////////ARABGgw3MDM3MjQ0MTE2MzciDOOarXUZtOTw/i99LiqiAVyM4GfWTJWRH62KfvNxy+U0ULwrAQEvshVB4rQveYlQWl16M/ZM4Pn/SItuTGXxpYhay7FNISLGFIgu/nrZFRVuz8DiLE4IclnUVbdWQXVyLZSl2kLEsI+9Dzgl5A2KPNtMQDMEqGmKPgloQvU5dfJycAqt7uapn2mZ61LjKqD7biVV5+AhgyQKYLUEFM6nSnagPVL+8LlZqpB3xlvax/16hjDF+Z/zBTrVAR+dSlDxi31TAl1w4bt12qmia6CW23q+rJTjmKfj6PjWLKoj/dgxHaPdoA5hfkuyqTj82n8ro5r8uQpWLN+bQjZdw70z1uZ0fcFUa0klqBLtMzQlk3MqgySZdwEk3oBrAYDb1x/QyQrXTUKKsApoEoTFvJBAwChQfOvGg2IT2ZoOFxzOwbtzy9JAE+HcFCwWiLINDGMq7yqmiaoBBs+B8e9U0xUEYjb/A5Fr18UqYxggkbb1j7sgdBqbzlAQbiQmGCDn+8q9osY7Ss4dQojTslYpR2PBvA==', 'Authorization': b'AWS4-HMAC-SHA256 Credential=ASIA2HWJ6LL2ZKDDRQZ2/20200310/eu-west-1/dynamodb/aws4_request, SignedHeaders=content-type;host;x-amz-date;x-amz-security-token;x-amz-target, Signature=7ac6ba62027fb817085459b14f79fb91e05181ab7e158448111a258818d52316', 'Content-Length': '279'}>
+[2020-03-10T21:47:01.988+01:00][DEBUG]-connectionpool.py:959,Starting new HTTPS connection (1): dynamodb.eu-west-1.amazonaws.com:443
+[2020-03-10T21:47:02.754+01:00][DEBUG]-connectionpool.py:437,https://dynamodb.eu-west-1.amazonaws.com:443 "POST / HTTP/1.1" 200 2
+[2020-03-10T21:47:02.762+01:00][DEBUG]-parsers.py:234,Response headers: {'Server': 'Server', 'Date': 'Tue, 10 Mar 2020 20:47:02 GMT', 'Content-Type': 'application/x-amz-json-1.0', 'Content-Length': '2', 'Connection': 'keep-alive', 'x-amzn-RequestId': 'TP5L31SB82CT8LQPB2H08IUNMBVV4KQNSO5AEMVJF66Q9ASUAAJG', 'x-amz-crc32': '2745614147'}
+[2020-03-10T21:47:02.762+01:00][DEBUG]-parsers.py:235,Response body:
+[2020-03-10T21:47:02.762+01:00][DEBUG]-b'{}'
+[2020-03-10T21:47:02.764+01:00][DEBUG]-hooks.py:210,Event needs-retry.dynamodb.PutItem: calling handler <botocore.retryhandler.RetryHandler object at 0x74743ad0>
+[2020-03-10T21:47:02.766+01:00][DEBUG]-retryhandler.py:187,No retry needed.
+[2020-03-10T21:47:02.767+01:00][DEBUG]-ggUploadImage.py:65,dynamodb: success
+[2020-03-10T21:47:02.772+01:00][INFO]-ggUploadImage.py:44,car queue is empty
+[2020-03-10T21:47:12.779+01:00][INFO]-ggUploadImage.py:44,car queue is empty
+[2020-03-10T21:47:22.785+01:00][INFO]-ggUploadImage.py:44,car queue is empty
+[2020-03-10T21:47:32.792+01:00][INFO]-ggUploadImage.py:44,car queue is empty
+[2020-03-10T21:47:42.798+01:00][INFO]-ggUploadImage.py:44,car queue is empty
+[2020-03-10T21:47:52.805+01:00][INFO]-ggUploadImage.py:44,car queue is empty
+[2020-03-10T21:48:02.811+01:00][INFO]-ggUploadImage.py:4
+
+
+[2020-03-10T22:06:23.899+01:00][DEBUG]-ggUploadImage.py:51,redis data is below: 
+[2020-03-10T22:06:23.9+01:00][DEBUG]-ggUploadImage.py:52,{'img_local_path': 'home/pi/Freenove_4WD_Smart_Car_Kit_for_Raspberry_Pi/Code/camera_images/img_right_1583872204.4793105.jpg', 'detection_time': '2020-30-03/10/20 21:30:04', 'position': 'right', 'rfid_pos': 'xe01'}
+[2020-03-10T22:06:23.9+01:00][DEBUG]-ggUploadImage.py:22,s3_upload: entry
+[2020-03-10T22:06:23.91+01:00][DEBUG]-hooks.py:417,Changing event name from creating-client-class.iot-data to creating-client-class.iot-data-plane
+[2020-03-10T22:06:23.962+01:00][DEBUG]-hooks.py:417,Changing event name from before-call.apigateway to before-call.api-gateway
+[2020-03-10T22:06:23.968+01:00][DEBUG]-hooks.py:417,Changing event name from request-created.machinelearning.Predict to request-created.machine-learning.Predict
+[2020-03-10T22:06:23.995+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.autoscaling.CreateLaunchConfiguration to before-parameter-build.auto-scaling.CreateLaunchConfiguration
+[2020-03-10T22:06:23.996+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.route53 to before-parameter-build.route-53
+[2020-03-10T22:06:24+01:00][DEBUG]-hooks.py:417,Changing event name from request-created.cloudsearchdomain.Search to request-created.cloudsearch-domain.Search
+[2020-03-10T22:06:24.006+01:00][DEBUG]-hooks.py:417,Changing event name from docs.*.autoscaling.CreateLaunchConfiguration.complete-section to docs.*.auto-scaling.CreateLaunchConfiguration.complete-section
+[2020-03-10T22:06:24.024+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.logs.CreateExportTask to before-parameter-build.cloudwatch-logs.CreateExportTask
+[2020-03-10T22:06:24.025+01:00][DEBUG]-hooks.py:417,Changing event name from docs.*.logs.CreateExportTask.complete-section to docs.*.cloudwatch-logs.CreateExportTask.complete-section
+[2020-03-10T22:06:24.025+01:00][DEBUG]-hooks.py:417,Changing event name from before-parameter-build.cloudsearchdomain.Search to before-parameter-build.cloudsearch-domain.Search
+[2020-03-10T22:06:24.026+01:00][DEBUG]-hooks.py:417,Changing event name from docs.*.cloudsearchdomain.Search.complete-section to docs.*.cloudsearch-domain.Search.complete-section
+[2020-03-10T22:06:24.07+01:00][DEBUG]-loaders.py:174,Loading JSON file: /lambda/boto3/data/s3/2006-03-01/resources-1.json
+[2020-03-10T22:06:24.092+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: env
+[2020-03-10T22:06:24.092+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: assume-role
+[2020-03-10T22:06:24.092+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: assume-role-with-web-identity
+[2020-03-10T22:06:24.093+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: shared-credentials-file
+[2020-03-10T22:06:24.094+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: custom-process
+[2020-03-10T22:06:24.094+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: config-file
+[2020-03-10T22:06:24.094+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: ec2-credentials-file
+[2020-03-10T22:06:24.095+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: boto-config
+[2020-03-10T22:06:24.095+01:00][DEBUG]-credentials.py:1947,Looking for credentials via: container-role
+[2020-03-10T22:06:24.099+01:00][DEBUG]-connectionpool.py:225,Starting new HTTP connection (1): localhost:8000
+[2020-03-10T22:06:24.423+01:00][DEBUG]-connectionpool.py:437,http://localhost:8000 "GET /2016-11-01/credentialprovider/ HTTP/1.1" 200 854
+[2020-03-10T22:06:24.423+01:00][DEBUG]-loaders.py:174,Loading JSON file: /lambda/botocore/data/endpoints.json
+[2020-03-10T22:06:24.478+01:00][DEBUG]-hooks.py:210,Event choose-service-name: calling handler <function handle_service_name_alias at 0x75a87618>
+[2020-03-10T22:06:24.545+01:00][DEBUG]-loaders.py:174,Loading JSON file: /lambda/botocore/data/s3/2006-03-01/service-2.json
+[2020-03-10T22:06:24.808+01:00][DEBUG]-hooks.py:210,Event creating-client-class.s3: calling handler <function add_generate_presigned_post at 0x75ba19c0>
+[2020-03-10T22:06:24.808+01:00][DEBUG]-hooks.py:210,Event creating-client-class.s3: calling handler <function lazy_call.<locals>._handler at 0x75ae8150>
+[2020-03-10T22:06:24.888+01:00][ERROR]-ggUploadImage.py:70,upload_img_to_cloud error: SyntaxError('invalid syntax', ('/lambda/concurrent/futures/_base.py', 414, 33, '            raise exception_type, self._exception, self._traceback\n'))
+[2020-03-10T22:06:34.909+01:00][INFO]-ggUploadImage.py:44,car queue is empty
+[2020-03-10T22:06:44.916+01:00][INFO]-ggUploadImage.py:44,car queue is empty
+[2020-03-10T22:06:54.922+01:00][DEBUG]-ggUploadImage.py:51,redis data is below: 
+[2020-03-10T22:06:54.923+01:00][DEBUG]-ggUploadImage.py:52,{'img_local_path': 'home/pi/Freenove_4WD_Smart_Car_Kit_for_Raspberry_Pi/Code/camera_images/img_right_1583872204.4793105.jpg', 'detection_time': '2020-30-03/10/20 21:30:04', 'position': 'right', 'rfid_pos': 'xe01'}
+[2020-03-10T22:06:54.923+01:00][DEBUG]-ggUploadImage.py:22,s3_upload: entry
+[2020-03-10T22:06:54.93+01:00][DEBUG]-hooks.py:210,Event choose-service-name: calling handler <function handle_service_name_alias at 0x75a87618>
+[2020-03-10T22:06:54.942+01:00][DEBUG]-hooks.py:210,Event creating-client-class.s3: calling handler <function add_generate_presigned_post at 0x75ba19c0>
+[2020-03-10T22:06:54.943+01:00][DEBUG]-hooks.py:210,Event creating-client-class.s3: calling handler <function lazy_call.<locals>._handler at 0x75ae8150>
+[2020-03-10T22:06:55.017+01:00][ERROR]-ggUploadImage.py:70,upload_img_to_cloud error: SyntaxError('invalid syntax', ('/lambda/concurrent/futures/_base.py', 414, 33, '            raise exception_type, self._exception, self._traceback\n'))
+[2020-03-10T22:07:05.024+01:00][INFO]-ggUploadImage.py:44,car queue is empty
+
+
+
+2020-03-11T20:52:03.91+01:00][INFO]-lambda_runtime.py:147,Running [arn:aws:lambda:eu-west-1:703724411637:function:upload-image:5]
+[2020-03-11T20:52:03.911+01:00][INFO]-ipc_client.py:192,Getting work for function [arn:aws:lambda:eu-west-1:703724411637:function:upload-image:5] from http://localhost:8000/2016-11-01/functions/arn:aws:lambda:eu-west-1:703724411637:function:upload-image:5/work
+[2020-03-11T20:52:13.918+01:00][DEBUG]-ggUploadImage.py:51,redis data is below: 
+[2020-03-11T20:52:13.918+01:00][DEBUG]-ggUploadImage.py:52,{'img_local_path': 'home/pi/Freenove_4WD_Smart_Car_Kit_for_Raspberry_Pi/Code/camera_images/img_right_1583956213.7055032.jpg', 'detection_time': '2020-50-03/11/20 20:50:13', 'position': 'right', 'rfid_pos': 'xe01'}
+[2020-03-11T20:52:13.918+01:00][DEBUG]-ggUploadImage.py:24,s3_upload: entry
+[2020-03-11T20:52:13.922+01:00][DEBUG]-hooks.py:210,Event choose-service-name: calling handler <function handle_service_name_alias at 0x75a81618>
+[2020-03-11T20:52:13.935+01:00][DEBUG]-hooks.py:210,Event creating-client-class.s3: calling handler <function add_generate_presigned_post at 0x75b999c0>
+[2020-03-11T20:52:13.935+01:00][DEBUG]-hooks.py:210,Event creating-client-class.s3: calling handler <function lazy_call.<locals>._handler at 0x75a22348>
+[2020-03-11T20:52:13.936+01:00][DEBUG]-hooks.py:210,Event creating-client-class.s3: calling handler <function add_generate_presigned_url at 0x75b998a0>
+[2020-03-11T20:52:13.954+01:00][DEBUG]-endpoint.py:266,Setting s3 timeout as (60, 60)
+[2020-03-11T20:52:13.962+01:00][DEBUG]-client.py:159,Registering retry handlers for service: s3
+[2020-03-11T20:52:13.976+01:00][DEBUG]-utils.py:580,Acquiring 0
+[2020-03-11T20:52:13.977+01:00][DEBUG]-tasks.py:194,UploadSubmissionTask(transfer_id=0, {'transfer_future': <s3transfer.futures.TransferFuture object at 0x74e5e9d0>}) about to wait for the following futures []
+[2020-03-11T20:52:13.977+01:00][DEBUG]-tasks.py:203,UploadSubmissionTask(transfer_id=0, {'transfer_future': <s3transfer.futures.TransferFuture object at 0x74e5e9d0>}) done waiting for dependent futures
+[2020-03-11T20:52:13.978+01:00][DEBUG]-tasks.py:147,Executing task UploadSubmissionTask(transfer_id=0, {'transfer_future': <s3transfer.futures.TransferFuture object at 0x74e5e9d0>}) with kwargs {'client': <botocore.client.S3 object at 0x74e5e030>, 'config': <boto3.s3.transfer.TransferConfig object at 0x74e5e630>, 'osutil': <s3transfer.utils.OSUtils object at 0x74e5e610>, 'request_executor': <s3transfer.futures.BoundedExecutor object at 0x74e5e730>, 'transfer_future': <s3transfer.futures.TransferFuture object at 0x74e5e9d0>}
+[2020-03-11T20:52:13.979+01:00][DEBUG]-tasks.py:160,Exception raised.
+[2020-03-11T20:52:13.979+01:00][DEBUG]-Traceback (most recent call last):
+[2020-03-11T20:52:13.979+01:00][DEBUG]-  File "/lambda/s3transfer/tasks.py", line 255, in _main
+[2020-03-11T20:52:13.979+01:00][DEBUG]-    self._submit(transfer_future=transfer_future, **kwargs)
+[2020-03-11T20:52:13.979+01:00][DEBUG]-  File "/lambda/s3transfer/upload.py", line 549, in _submit
+[2020-03-11T20:52:13.979+01:00][DEBUG]-    upload_input_manager.provide_transfer_size(transfer_future)
+[2020-03-11T20:52:13.979+01:00][DEBUG]-  File "/lambda/s3transfer/upload.py", line 237, in provide_transfer_size
+[2020-03-11T20:52:13.979+01:00][DEBUG]-    transfer_future.meta.call_args.fileobj))
+[2020-03-11T20:52:13.979+01:00][DEBUG]-  File "/lambda/s3transfer/utils.py", line 245, in get_file_size
+[2020-03-11T20:52:13.979+01:00][DEBUG]-    return os.path.getsize(filename)
+[2020-03-11T20:52:13.979+01:00][DEBUG]-  File "/usr/lib/python3.7/genericpath.py", line 50, in getsize
+[2020-03-11T20:52:13.979+01:00][DEBUG]-    return os.stat(filename).st_size
+[2020-03-11T20:52:13.98+01:00][DEBUG]-FileNotFoundError: [Errno 2] No such file or directory: 'home/pi/Freenove_4WD_Smart_Car_Kit_for_Raspberry_Pi/Code/camera_images/img_right_1583956213.7055032.jpg'utils.py:593,Releasing acquire 0/None
+[2020-03-11T20:52:13.981+01:00][ERROR]-ggUploadImage.py:66,upload_img_to_cloud error: FileNotFoundError(2, 'No such file or directory')
+[2020-03-11T20:52:23.997+01:00][INFO]-ggUploadImage.py:44,car queue is empty
+[2020-03-11T20:52:34.004+01:00][INFO]-ggUploadImage.py:44,car queue

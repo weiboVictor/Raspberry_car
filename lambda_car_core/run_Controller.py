@@ -15,7 +15,7 @@ cli = Redis('localhost')
 CONTROL_CYCLE = 0.02 # Control cycle is every 20ms.
 SERVO_ORIZON = 95
 SERVO_VERTIC = 95
-DEFAULT_PATH = 'home/pi/Freenove_4WD_Smart_Car_Kit_for_Raspberry_Pi/Code/'
+DEFAULT_PATH = '/home/pi/'
 
 
 # Controller
@@ -39,7 +39,7 @@ class Controller:
             self.PWM.setMotorModel(800,800,800,800) #Forward
         if infrared_LMR==0:
             logger.debug("Func_navigate: LMR=0")
-            self.PWM.setMotorModel(500,500,500,500) #Forward
+            self.PWM.setMotorModel(500,500,500,500) #Slow Forward
         elif infrared_LMR==4:
             logger.debug("Func_navigate: LMR=4")
             self.PWM.setMotorModel(-1500,-1500,2500,2500) #Left
@@ -67,18 +67,17 @@ class Controller:
         ret, frame = video_capture.read()
         video_capture.release()
         if ret and frame is not None:
-            img_local_path = DEFAULT_PATH+"camera_images/img_%s_%s.jpg"%(img_pos, time.time())
+            detection_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            img_local_path = DEFAULT_PATH+"camera_images/img_%s_%s.jpg"%(img_pos, detection_time)
             logger.debug("Func_Save_img: img_local_path: %s"%img_local_path)
             cv2.imwrite(img_local_path, frame)
         
-        detection_time = time.strftime("%Y-%M-%D %H:%M:%S", time.localtime())
-        rfid_pos = "xe01"
-        
-        img_meta = {'img_local_path':img_local_path,'detection_time': detection_time, 'position':img_pos, 'rfid_pos':rfid_pos}
-        img_meta = json.dumps(img_meta)
-        logger.debug("Func_Save_img: --> image meta")
-        logger.debug(img_meta)
-        cli.rpush("car", img_meta)
+            rfid_pos = "xe01" # to replace
+            img_meta = {'img_local_path':img_local_path,'detection_time': detection_time, 'position':img_pos, 'rfid_pos':rfid_pos}
+            img_meta = json.dumps(img_meta)
+            logger.debug("Func_Save_img: --> image meta")
+            logger.debug(img_meta)
+            cli.rpush("car_images", img_meta)
 
     
     def obstacle_recognition(self):
@@ -123,11 +122,12 @@ class Controller:
             logger.debug("Func_Run: ultrasonic_M = %d; infrared_LMR = %d"%(ultrasonic_M,infrared_LMR))
 
             # Basic control modules: Obstacle recognition and Line Tracking. 
-            
             if ultrasonic_M<30 and ((time.time()-last_obstacle)>5):
                 logger.info("Func_Run: detect new obstacle")
                 last_obstacle = time.time()
                 self.obstacle_recognition()
+            
+            # elif cloud events
 
             else:
                 logger.info("Func_Run: navigate...")
